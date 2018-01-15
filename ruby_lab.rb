@@ -4,13 +4,13 @@
 #
 # CSCI 305 - Ruby Programming Lab
 #
-# <firstname> <lastname>
-# <email-address>
+# Austin Rosenbaum
+# austinjrosenbaum@gmail.com
 #
 ###############################################################
 
 $bigrams = Hash.new # The Bigram data structure
-$name = "<firstname> <lastname>"
+$name = "Austin Rosenbaum"
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
@@ -19,6 +19,29 @@ def process_file(file_name)
 	begin
 		IO.foreach(file_name) do |line|
 			# do something for each line
+			# use regexp to remove junk before the title
+			before_title_re = /.*>/
+			line = line.sub!(before_title_re, "")
+			title = line
+			
+			# us regexp to remove junk after main song title
+			after_title_re = /(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*/
+			match = title.scan(after_title_re).to_s
+			
+			# blank matches are clearing entire line, so check that something was matched
+			if match != "[]"
+				title = title.sub!(after_title_re, "")
+			end
+			
+			# Remove punctuation from titles, perform global replace (gsub!)
+			
+			# Remove non english characters
+			
+			# set to lowercase
+			title.downcase
+			
+			
+			puts title
 		end
 
 		puts "Finished. Bigram model built.\n"
