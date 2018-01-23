@@ -20,28 +20,46 @@ def process_file(file_name)
 		IO.foreach(file_name) do |line|
 			# do something for each line
 			# use regexp to remove junk before the title
+			line.force_encoding 'utf-8'
 			before_title_re = /.*>/
-			line = line.sub!(before_title_re, "")
+			line.sub!(before_title_re, "")
 			title = line
-			
+
 			# us regexp to remove junk after main song title
 			after_title_re = /(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*/
-			match = title.scan(after_title_re).to_s
-			
+			title.sub!(after_title_re, "")
+			#match = title.scan(after_title_re).to_s
+
 			# blank matches are clearing entire line, so check that something was matched
-			if match != "[]"
-				title = title.sub!(after_title_re, "")
-			end
-			
+			#if match != "[]"
+			#	title = title.sub!(after_title_re, "")
+			#end
+
 			# Remove punctuation from titles, perform global replace (gsub!)
-			
+			# Remove ? ¿ ! ¡ . ; & @ % # |
+			punc_re = /(\?|¿|!|¡|\.|;|&|@|%|#|\|)/
+			title.gsub!(punc_re, "")
+
 			# Remove non english characters
-			
+
+			english_re = /[\W]/
+			match = title.scan(english_re)
+			valid = true
+			match.each do |char|
+				# check each char to see if it does not match " ", "'", or "\n"
+				if char != " " && char != "'" && char != "\n"
+					# do not print line
+					valid = false
+					line = nil
+				end
+			end
+
+
 			# set to lowercase
-			title.downcase
-			
-			
-			puts title
+			title.downcase! if not nil
+
+
+			#puts title if valid
 		end
 
 		puts "Finished. Bigram model built.\n"
@@ -51,6 +69,56 @@ def process_file(file_name)
 	end
 end
 
+def cleanup_title(line)
+begin
+		# do something for each line
+		# use regexp to remove junk before the title
+		line.force_encoding 'utf-8'
+		before_title_re = /.*>/
+		line.sub!(before_title_re, "")
+		title = line
+
+		# us regexp to remove junk after main song title
+		after_title_re = /(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*/
+		title.sub!(after_title_re, "")
+		#match = title.scan(after_title_re).to_s
+
+		# blank matches are clearing entire line, so check that something was matched
+		#if match != "[]"
+		#	title = title.sub!(after_title_re, "")
+		#end
+
+		# Remove punctuation from titles, perform global replace (gsub!)
+		# Remove ? ¿ ! ¡ . ; & @ % # |
+		punc_re = /(\?|¿|!|¡|\.|;|&|@|%|#|\|)/
+		title.gsub!(punc_re, "")
+
+		# Remove non english characters
+
+		english_re = /[\W]/
+		match = title.scan(english_re)
+		valid = true
+		match.each do |char|
+			# check each char to see if it does not match " ", "'", or "\n"
+			if char != " " && char != "'" && char != "\n"
+				# do not print line
+				valid = false
+				line = nil
+			end
+		end
+
+
+		# set to lowercase
+		title.downcase! if not nil
+
+		#puts title if valid
+
+	#puts "Finished. Bigram model built.\n"
+rescue
+	STDERR.puts "Could not open file"
+	exit 4
+end
+end
 # Executes the program
 def main_loop()
 	puts "CSCI 305 Ruby Lab submitted by #{$name}"
