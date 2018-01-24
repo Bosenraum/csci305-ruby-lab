@@ -43,7 +43,6 @@ def process_file(file_name)
 
 			# Remove non english characters
 
-			#english_re = /[\W]/
 			english_re = /^(\w|'|\s)+\n$/
 			if line =~ english_re
 				valid = true
@@ -51,16 +50,7 @@ def process_file(file_name)
 				valid = false
 				line = nil
 			end
-			# match = title.scan(english_re)
-			# valid = true
-			# match.each do |char|
-			# 	# check each char to see if it does not match " ", "'", or "\n"
-			# 	if char != " " && char != "'" && char != "\n"
-			# 		# do not print line
-			# 		valid = false
-			# 		line = nil
-			# 	end
-			# end
+
 
 
 			# set to lowercase
