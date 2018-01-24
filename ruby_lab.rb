@@ -75,6 +75,7 @@ def process_file(file_name)
 			#puts title if valid
 		end
 
+		# Check 2 testing
 		#p "Length of Bigram: #{$bigrams.size}"
 		#p "#{$bigrams["happy"]}"
 		#p mcw("happy")
@@ -132,17 +133,14 @@ begin
 
 		# Remove non english characters
 
-		english_re = /[\W]/
-		match = title.scan(english_re)
-		valid = true
-		match.each do |char|
-			# check each char to see if it does not match " ", "'", or "\n"
-			if char != " " && char != "'" && char != "\n"
-				# do not print line
-				valid = false
-				line = nil
-			end
+		english_re = /^(\w|'|\s)+\n$/
+		if line =~ english_re
+			valid = true
+		else
+			valid = false
+			line = nil
 		end
+
 
 
 		# set to lowercase
