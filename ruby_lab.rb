@@ -52,22 +52,23 @@ def process_file(file_name)
 			end
 
 
-
 			# set to lowercase
 			title.downcase! if valid
-			$num_lines += 1 if valid
+			#$num_lines += 1 if valid
 
 			# Create bi-gram count from valid words
 			# begin by spliting into individual words
-			words = title.split(" ")
-			(0..(words.length - 2)).each do |i|
-				if $bigrams[words[i]].nil?
-					$bigrams[words[i]] = Hash.new
-					$bigrams[words[i]][words[i+1]] = 1
-				elsif $bigrams[words[i]][words[i+1]].nil?
-					$bigrams[words[i]][words[i+1]] = 1
-				else
-					$bigrams[words[i]][words[i+1]] += 1
+			if valid
+				words = title.split(" ")
+				(0..(words.length - 2)).each do |i|
+					if $bigrams[words[i]].nil?
+						$bigrams[words[i]] = Hash.new
+						$bigrams[words[i]][words[i+1]] = 1
+					elsif $bigrams[words[i]][words[i+1]].nil?
+						$bigrams[words[i]][words[i+1]] = 1
+					else
+						$bigrams[words[i]][words[i+1]] += 1
+					end
 				end
 			end
 
@@ -82,7 +83,7 @@ def process_file(file_name)
 		#p mcw("sad")
 		#p mcw("love")
 		puts "Finished. Bigram model built.\n"
-		puts "#{$num_lines}"
+		#puts "#{$num_lines}"
 	rescue
 		raise
 		STDERR.puts "Could not open file"
@@ -90,20 +91,43 @@ def process_file(file_name)
 	end
 end
 
+# function for finding most common word to follow a given word
 def mcw(word)
-	next_word = $bigrams[word].keys
-	#p next_word
-	max = 0
-	max_key = nil
-	next_word.each do |key|
+	if not $bigrams[word].nil?
+		next_word = $bigrams[word].keys
+		#p next_word
+		max = 0
+		max_key = nil
+		next_word.each do |key|
 
-		#p "#{key}: #{$bigrams[word][key]}"
-		if $bigrams[word][key] > max
-			max = $bigrams[word][key]
-			max_key = key
+			#p "#{key}: #{$bigrams[word][key]}"
+			if $bigrams[word][key] > max
+				if rand(99) < 50
+					max = $bigrams[word][key]
+					max_key = key
+				end
+			elsif $bigrams[word][key] == max
+				if rand(99) < 50
+					mak_key = key
+				end
+			end
 		end
+		return max_key
 	end
-	return max_key
+	return nil
+end
+
+def create_title(word)
+	word_count = 0
+	title = "#{word} "
+	next_word = mcw(word)
+	while not next_word.nil?
+		title += "#{next_word} "
+		next_word = mcw(next_word)
+		word_count += 1
+		break if word_count > 20
+	end
+	return title
 end
 
 # function required for self check 1
@@ -167,7 +191,14 @@ def main_loop()
 	# process the file
 	process_file(ARGV[0])
 
+	# test song creation
+	puts create_title("have")
+	puts create_title("love")
+	puts create_title("happy")
+	puts create_title("song")
+
 	# Get user input
+
 end
 
 main_loop()
