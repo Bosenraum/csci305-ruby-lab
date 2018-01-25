@@ -12,6 +12,7 @@
 $bigrams = Hash.new # The Bigram data structure
 $name = "Austin Rosenbaum"
 $num_lines = 0
+$total_lines = 0
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
@@ -54,16 +55,14 @@ def process_file(file_name)
 
 			# set to lowercase
 			title.downcase! if valid
-			#$num_lines += 1 if valid
+			$num_lines += 1 if valid
+			$total_lines += 1
 
 			# Create bi-gram count from valid words
 			# begin by spliting into individual words
 			if valid
 				words = title.split(" ")
 				(0..(words.length - 2)).each do |i|
-					if words[i] == 'computer'
-						puts "computer #{words[i+1]}"
-					end
 					if $bigrams[words[i]].nil?
 						$bigrams[words[i]] = Hash.new
 						$bigrams[words[i]][words[i+1]] = 1
@@ -86,7 +85,9 @@ def process_file(file_name)
 		#p mcw("sad")
 		#p mcw("love")
 		puts "Finished. Bigram model built.\n"
-		#puts "#{$num_lines}"
+		puts "Valid lines: #{$num_lines}"
+		puts "Total lines: #{$total_lines}"
+
 	rescue
 		raise
 		STDERR.puts "Could not open file"
