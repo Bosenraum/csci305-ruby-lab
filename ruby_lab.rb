@@ -196,9 +196,9 @@ def main_loop()
 	process_file(ARGV[0])
 
 	# test mcw
-	p "Unique words following computer: #{$bigrams["computer"].count}"
-	p "Most common word to follow computer: #{mcw("computer")}"
-	p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
+	#p "Unique words following computer: #{$bigrams["computer"].count}"
+	#p "Most common word to follow computer: #{mcw("computer")}"
+	#p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
 
 
 	# test song creation
@@ -208,6 +208,13 @@ def main_loop()
 	#puts create_title("song")
 
 	# Get user input
+	print "Enter a word>>"
+	input = STDIN.gets.chomp
+	while input != 'q'
+		puts create_title(input)
+		print "Enter a word>>"
+	  input = STDIN.gets.chomp
+	end
 
 end
 
