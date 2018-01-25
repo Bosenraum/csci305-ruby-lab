@@ -61,6 +61,9 @@ def process_file(file_name)
 			if valid
 				words = title.split(" ")
 				(0..(words.length - 2)).each do |i|
+					if words[i] == 'computer'
+						puts "computer #{words[i+1]}"
+					end
 					if $bigrams[words[i]].nil?
 						$bigrams[words[i]] = Hash.new
 						$bigrams[words[i]][words[i+1]] = 1
@@ -102,14 +105,14 @@ def mcw(word)
 
 			#p "#{key}: #{$bigrams[word][key]}"
 			if $bigrams[word][key] > max
-				if rand(99) < 50
+				#if rand(99) < 50
 					max = $bigrams[word][key]
 					max_key = key
-				end
+				#end
 			elsif $bigrams[word][key] == max
-				if rand(99) < 50
-					mak_key = key
-				end
+				#if rand(99) < 50
+					#mak_key = key
+				#end
 			end
 		end
 		return max_key
@@ -118,11 +121,11 @@ def mcw(word)
 end
 
 def create_title(word)
-	word_count = 0
-	title = "#{word} "
+	word_count = 1
+	title = "#{word}"
 	next_word = mcw(word)
 	while not next_word.nil?
-		title += "#{next_word} "
+		title += " #{next_word}"
 		next_word = mcw(next_word)
 		word_count += 1
 		break if word_count > 20
@@ -191,11 +194,17 @@ def main_loop()
 	# process the file
 	process_file(ARGV[0])
 
+	# test mcw
+	p "Unique words following computer: #{$bigrams["computer"].count}"
+	p "Most common word to follow computer: #{mcw("computer")}"
+	p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
+
+
 	# test song creation
-	puts create_title("have")
-	puts create_title("love")
-	puts create_title("happy")
-	puts create_title("song")
+	#puts create_title("have")
+	#puts create_title("love")
+	#puts create_title("happy")
+	#puts create_title("song")
 
 	# Get user input
 
