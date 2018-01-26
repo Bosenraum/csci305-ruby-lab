@@ -6,8 +6,9 @@ def process_file(file)
 
   #file.read(size) returns a string of length 'size'
   #size of unique_tracks.txt = 85049344
+  file_size = File.new(file).size
   File.open(file) do |f|
-    split_string(f.read(85049344)) until f.eof?
+    split_string(f.read(file_size)) until f.eof?
   end
   puts "Total lines read: #{$num_lines}"
 

@@ -2,6 +2,7 @@ require './ruby_lab'
 
 RSpec.describe "Lab Questions Check" do
   context "unique_tracks" do
+    puts "Processing unique_tracks.txt"
     process_file("unique_tracks.txt")
 
     it "1. Word most often following 'happy'" do
