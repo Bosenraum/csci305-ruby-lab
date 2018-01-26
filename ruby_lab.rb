@@ -16,7 +16,8 @@ $total_lines = 0
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
-	puts "Processing File.... #{file_name}"
+	puts "Processing File.... "
+	stop_words = %w{a an and by for from in of on or out the to with}
 
 	begin
 		#IO.foreach(file_name) do |line|
@@ -70,6 +71,11 @@ def process_file(file_name)
 			# begin by spliting into individual words
 			if valid
 				words = title.split(" ")
+
+				# See if any of the words match a stop word
+				# if so, remove them with array subtraction
+				words = words - stop_words
+
 				(0..(words.length - 2)).each do |i|
 					if $bigrams[words[i]].nil?
 						$bigrams[words[i]] = Hash.new
@@ -208,16 +214,16 @@ def main_loop()
 	process_file(ARGV[0])
 
 	# test mcw
-	p "Unique words following computer: #{$bigrams["computer"].count}"
-	p "Most common word to follow computer: #{mcw("computer")}"
-	p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
+	# p "Unique words following computer: #{$bigrams["computer"].count}"
+	# p "Most common word to follow computer: #{mcw("computer")}"
+	# p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
 
 
 	# test song creation
-	puts create_title("happy")
-	puts create_title("sad")
-	puts create_title("hey")
+	puts create_title("amore")
+	puts create_title("love")
 	puts create_title("little")
+	puts create_title("happy")
 
 	# Get user input
 	print "Enter a word>>"
@@ -230,4 +236,4 @@ def main_loop()
 
 end
 
-#main_loop()
+main_loop()

@@ -1,11 +1,11 @@
 Austin Rosenbaum
 CSCI-305
 
-10.
+10. The problem is that the song titles being to repeat. The phrase "is a little girl in the world" repeats in 3 of the four examples above.
 
-14.
+14. The titles devolve into repeating patterns because to this point, we are taking only the most common word to follow a given word. If two words have each other as the most common word, it will loop those two words. Many words in the English language have patterns like these with groups of two to five or more words that repeat.
 
-15.
+15. The word "amore" creates a title that terminates. The only other words I could find were names such as "pad" which gave "pat reilly" or "jasper" giving "jasper carnelian". It is difficult to find terminating songs like this because eventually there is a good chance of the next word being "you", "are", "heart", "is", or other very common words that cause a repeat. 
 
 16.
 
