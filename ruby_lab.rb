@@ -124,19 +124,19 @@ def mcw(word)
 
 			#p "#{key}: #{$bigrams[word][key]}"
 			if $bigrams[word][key] > max
-				#if rand(99) < 50
 					max = $bigrams[word][key]
 					max_key = key
-				#end
-			elsif $bigrams[word][key] == max
-				#if rand(99) < 50
-					#mak_key = key
-				#end
 			end
 		end
 		return max_key
 	end
 	return nil
+end
+
+# generate a word to follow the arguement "word"
+# This process should be semi-random and should terminate before 20 words
+def get_next_word(word)
+
 end
 
 def create_title(word)
@@ -187,15 +187,9 @@ begin
 			line = nil
 		end
 
-
-
 		# set to lowercase
 		title.downcase! if valid
 	  return title
-
-		#puts title if valid
-
-	#puts "Finished. Bigram model built.\n"
 rescue
 	STDERR.puts "Could not open file"
 	exit 4
@@ -226,11 +220,11 @@ def main_loop()
 	puts create_title("happy")
 
 	# Get user input
-	print "Enter a word>>"
+	print "Enter a word>> "
 	input = $stdin.gets.chomp
 	while input != 'q'
 		puts create_title(input)
-		print "Enter a word>>"
+		print "Enter a word>> "
 	  input = $stdin.gets.chomp
 	end
 
