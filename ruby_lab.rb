@@ -11,6 +11,11 @@
 
 $bigrams = Hash.new # The Bigram data structure
 $name = "Austin Rosenbaum"
+<<<<<<< HEAD
+=======
+$num_lines = 0
+$total_lines = 0
+>>>>>>> 198d471b327b1f4e1b4cabb4165e71debf3fa9c2
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
@@ -42,6 +47,7 @@ def process_file(file_name)
 
 			# Remove non english characters
 
+<<<<<<< HEAD
 			english_re = /[\W]/
 			match = title.scan(english_re)
 			valid = true
@@ -52,23 +58,106 @@ def process_file(file_name)
 					valid = false
 					line = nil
 				end
+=======
+			english_re = /^(\w|'|\s)+\n$/
+			if line =~ english_re
+				valid = true
+			else
+				valid = false
+				line = nil
+>>>>>>> 198d471b327b1f4e1b4cabb4165e71debf3fa9c2
 			end
 
 
 			# set to lowercase
+<<<<<<< HEAD
 			title.downcase! if not nil
+=======
+			title.downcase! if valid
+			$num_lines += 1 if valid
+			$total_lines += 1
+
+			# Create bi-gram count from valid words
+			# begin by spliting into individual words
+			if valid
+				words = title.split(" ")
+				(0..(words.length - 2)).each do |i|
+					if $bigrams[words[i]].nil?
+						$bigrams[words[i]] = Hash.new
+						$bigrams[words[i]][words[i+1]] = 1
+					elsif $bigrams[words[i]][words[i+1]].nil?
+						$bigrams[words[i]][words[i+1]] = 1
+					else
+						$bigrams[words[i]][words[i+1]] += 1
+					end
+				end
+			end
+>>>>>>> 198d471b327b1f4e1b4cabb4165e71debf3fa9c2
 
 
 			#puts title if valid
 		end
 
+		# Check 2 testing
+		#p "Length of Bigram: #{$bigrams.size}"
+		#p "#{$bigrams["happy"]}"
+		#p mcw("happy")
+		#p mcw("sad")
+		#p mcw("love")
 		puts "Finished. Bigram model built.\n"
+		puts "Valid lines: #{$num_lines}"
+		puts "Total lines: #{$total_lines}"
+
 	rescue
+		raise
 		STDERR.puts "Could not open file"
 		exit 4
 	end
 end
 
+<<<<<<< HEAD
+=======
+# function for finding most common word to follow a given word
+def mcw(word)
+	if not $bigrams[word].nil?
+		next_word = $bigrams[word].keys
+		#p next_word
+		max = 0
+		max_key = nil
+		next_word.each do |key|
+
+			#p "#{key}: #{$bigrams[word][key]}"
+			if $bigrams[word][key] > max
+				#if rand(99) < 50
+					max = $bigrams[word][key]
+					max_key = key
+				#end
+			elsif $bigrams[word][key] == max
+				#if rand(99) < 50
+					#mak_key = key
+				#end
+			end
+		end
+		return max_key
+	end
+	return nil
+end
+
+def create_title(word)
+	word_count = 1
+	title = "#{word}"
+	next_word = mcw(word)
+	while not next_word.nil?
+		title += " #{next_word}"
+		next_word = mcw(next_word)
+		word_count += 1
+		break if word_count > 20
+	end
+	return title
+end
+
+# function required for self check 1
+>>>>>>> 198d471b327b1f4e1b4cabb4165e71debf3fa9c2
 def cleanup_title(line)
 begin
 		# do something for each line
@@ -95,6 +184,7 @@ begin
 
 		# Remove non english characters
 
+<<<<<<< HEAD
 		english_re = /[\W]/
 		match = title.scan(english_re)
 		valid = true
@@ -110,6 +200,21 @@ begin
 
 		# set to lowercase
 		title.downcase! if not nil
+=======
+		english_re = /^(\w|'|\s)+\n$/
+		if line =~ english_re
+			valid = true
+		else
+			valid = false
+			line = nil
+		end
+
+
+
+		# set to lowercase
+		title.downcase! if valid
+	  return title
+>>>>>>> 198d471b327b1f4e1b4cabb4165e71debf3fa9c2
 
 		#puts title if valid
 
@@ -131,7 +236,27 @@ def main_loop()
 	# process the file
 	process_file(ARGV[0])
 
+	# test mcw
+	#p "Unique words following computer: #{$bigrams["computer"].count}"
+	#p "Most common word to follow computer: #{mcw("computer")}"
+	#p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
+
+
+	# test song creation
+	#puts create_title("have")
+	#puts create_title("love")
+	#puts create_title("happy")
+	#puts create_title("song")
+
 	# Get user input
+	print "Enter a word>>"
+	input = STDIN.gets.chomp
+	while input != 'q'
+		puts create_title(input)
+		print "Enter a word>>"
+	  input = STDIN.gets.chomp
+	end
+
 end
 
 main_loop()
