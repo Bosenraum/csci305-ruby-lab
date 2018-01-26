@@ -117,23 +117,24 @@ end
 def mcw(word)
 	if not $bigrams[word].nil?
 		next_word = $bigrams[word].keys
+	  max_key = next_word[rand(next_word.length)]
 		#p next_word
-		max = 0
-		max_key = nil
-		next_word.each do |key|
-
-			#p "#{key}: #{$bigrams[word][key]}"
-			if $bigrams[word][key] > max
-				#if rand(99) < 50
-					max = $bigrams[word][key]
-					max_key = key
-				#end
-			elsif $bigrams[word][key] == max
-				#if rand(99) < 50
-					#mak_key = key
-				#end
-			end
-		end
+		# max = 0
+		# max_key = nil
+		# next_word.each do |key|
+    #
+		# 	#p "#{key}: #{$bigrams[word][key]}"
+		# 	if $bigrams[word][key] > max
+		# 		#if rand(99) < 50
+		# 			max = $bigrams[word][key]
+		# 			max_key = key
+		# 		#end
+		# 	elsif $bigrams[word][key] == max
+		# 		#if rand(99) < 50
+		# 			#mak_key = key
+		# 		#end
+		# 	end
+		# end
 		return max_key
 	end
 	return nil
