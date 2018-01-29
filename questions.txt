@@ -5,20 +5,27 @@ CSCI-305
 
 14. The titles devolve into repeating patterns because to this point, we are taking only the most common word to follow a given word. If two words have each other as the most common word, it will loop those two words. Many words in the English language have patterns like these with groups of two to five or more words that repeat.
 
-15. The word "amore" creates a title that terminates. The only other words I could find were names such as "pad" which gave "pat reilly" or "jasper" giving "jasper carnelian". It is difficult to find terminating songs like this because eventually there is a good chance of the next word being "you", "are", "heart", "is", or other very common words that cause a repeat. 
+15. The word "amore" creates a title that terminates. The only other words I could find were names such as "pad" which gave "pat reilly" or "jasper" giving "jasper carnelian". It is difficult to find terminating songs like this because eventually there is a good chance of the next word being "you", "are", "heart", "is", or other very common words that cause a repeat.
 
-16.
+16. To solve the repeating phrase issue, I created a new function called "get_next_word(word, count)" which takes a string and an integer as arguments. I then generate a random number from 0 to 99 and check if it is less than 400/count (the integer argument). The 400 is a scale factor, making it impossible to generate a song title less than 4 words long unless a terminal word is selected. This is easily adjustable if longer or shorter titles are desired. If the random number is lower than 400/count, and the word does not have a nil hash as its value, one of the words that follows it will be randomly selected and returned.
 
-19.
+If the random number is greater than 400/count, or there are no words that follow the arguement word, the function returns nil, allowing the song title to end. Through some testing, this method returns random song titles between 3 and 9 words long, although shorter and longer titles are possible.
 
-20.
+17. Using the starting word "montana", I got the title "montana blue cinemas"
 
-21.
+18. Using the starting word "bob", I got the title "bob montgomery green apple wagon wheel hoss race through"
 
-22.
+19. Using the starting word "bob" again, I got a different title, this time "bob back job man skall tala matrix".
+Starting with "bob" a third time, I got "bob turkee". The title differs each time because the words are now being selected randomly. Any word that follows "bob" has an equally likely chance of being selected. The same goes for all subsequent words making it even less likely to generate the same title twice.
 
-23.
+20. One of my favorite song titles I found (there are several) was "you comin' up jump shout top ballin' budget featuring mc nasty"
 
-24.
+21. I like how easy string manipulations are in Ruby. Using regular expressions, performing substitutions and other manipulations are lightweight and easy to use. I also really like string interpolation, it makes printing output very straightforward and predictable.
 
-25.
+22. One thing I dislike about Ruby is the way input is treated when arguments are passed into the program. This requires input to be specified as $stdin, which isn't really a bad thing, but it caused me some headache in this lab.
+
+23. I did enjoy this lab. The way the problem was laid out made approaching the lab very easy. Solving each regular expression piece one at a time helped me learn regular expressions, and also gave a sense of progress at the beginning which made it easier to keep going. I like the idea of having self checking questions, but these were a little confusing at first. After investigating what was happening it made more sense and became a good milestone for moving forward.
+
+24. I didn't really keep track of hours, especially early on, but I would guess I spent between 20 and 25 hours on this lab.
+
+25. I think I would use Ruby again in the future. I would be tempted to use it in applications where string manipulation is important or lots of regular expressions need to be used. I also know that Ruby on Rails is great for web projects so I could see myself doing some of that.  

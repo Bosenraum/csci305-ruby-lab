@@ -135,19 +135,27 @@ end
 
 # generate a word to follow the arguement "word"
 # This process should be semi-random and should terminate before 20 words
-def get_next_word(word)
-
+def get_next_word(word, count)
+	if rand(100) < 400/count
+		if not $bigrams[word].nil?
+			words = $bigrams[word].keys
+			return words[rand(words.length)]
+		end
+	end
+	return nil
 end
 
 def create_title(word)
 	word_count = 1
 	title = "#{word}"
-	next_word = mcw(word)
+	#next_word = mcw(word)
+	next_word = get_next_word(word, word_count)
 	while not next_word.nil?
 		title += " #{next_word}"
-		next_word = mcw(next_word)
+		#next_word = mcw(next_word)
+		next_word = get_next_word(next_word, word_count)
 		word_count += 1
-		break if word_count > 19
+		#break if word_count > 19
 	end
 	return title
 end
@@ -212,7 +220,6 @@ def main_loop()
 	# p "Most common word to follow computer: #{mcw("computer")}"
 	# p "Number of times it follows computer: #{$bigrams["computer"][mcw("computer")]}"
 
-
 	# test song creation
 	puts create_title("amore")
 	puts create_title("love")
@@ -221,11 +228,11 @@ def main_loop()
 
 	# Get user input
 	print "Enter a word>> "
-	input = $stdin.gets.chomp
+	input = $stdin.gets.chomp.downcase
 	while input != 'q'
 		puts create_title(input)
 		print "Enter a word>> "
-	  input = $stdin.gets.chomp
+	  input = $stdin.gets.chomp.downcase
 	end
 
 end
