@@ -72,7 +72,7 @@ def process_file(file_name)
 				# the valid flag to false
 				valid = false
 				line = nil
-			end
+			end # End if
 
 			# Only continue processing if valid is true
 
@@ -107,9 +107,9 @@ def process_file(file_name)
 						$bigrams[words[i]][words[i+1]] = 1
 					else
 						$bigrams[words[i]][words[i+1]] += 1
-					end
-				end
-			end
+					end # end bigram if
+				end # end words array iteration
+			end # end validation if
 
 		end	# End of line iteration
 
