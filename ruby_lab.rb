@@ -16,7 +16,14 @@ $name = "Austin Rosenbaum"
 # $num_lines = 0
 # $total_lines = 0
 
-# function to process each line of a file and extract the song titles
+# ##############################################################################
+# DESCRIPTION	:		Function to process each line of a file and extract
+# 								the song titles
+# ARGUMENTS		:		file_name - the name of the file to be opened and processed
+# RETURNS 		:		None
+# NOTES 			:		Function creates the bigram data structure that is stored in
+#   							the global variable $bigrams
+# ##############################################################################
 def process_file(file_name)
 	puts "Processing File.... "
 
@@ -30,7 +37,7 @@ def process_file(file_name)
 		# I was having problems with unique_tracks not processing fully, but the code
 		# below fixes this problem
 
-		line_arr = Array.new		# create array to hold lines
+		line_arr = Array.new										# create array to hold lines
 		file_size = File.new(file_name).size		# extract the size of the file in MB
 
 		#puts "#{file_name} is #{file_size} bytes long"		# debugging string
@@ -43,7 +50,7 @@ def process_file(file_name)
 
 		# Main processing for each line
 		line_arr.each do |line|
-			line += "\n"	# Add the endline character back after spliting on it
+			line += "\n"								# Add the endline character back after spliting on it
 
 			# Force the encoding to utf-8 to avoid issues with non english characters
 			line.force_encoding 'utf-8'
@@ -96,22 +103,25 @@ def process_file(file_name)
 				(0..(words.length - 2)).each do |i|
 
 					# Three possible cases:
-					# One: current word has not been added yet
-					# Two: the word after current word has not been added yet
-					# Three: both words have been added, so increment the count
-
 					if $bigrams[words[i]].nil?
+
+						# One: current word has not been added yet
 						$bigrams[words[i]] = Hash.new
 						$bigrams[words[i]][words[i+1]] = 1
 					elsif $bigrams[words[i]][words[i+1]].nil?
+
+						# Two: the word after current word has not been added yet
 						$bigrams[words[i]][words[i+1]] = 1
 					else
-						$bigrams[words[i]][words[i+1]] += 1
-					end
-				end
-			end
 
-		end	# End of line iteration
+						# Three: both words have been added, so increment the count
+						$bigrams[words[i]][words[i+1]] += 1
+
+					end			# end bigrams if
+				end				# end words iterator
+			end					# end if valid
+
+		end						# End of line iteration
 
 		# Check 2 testing
 		#p "Length of Bigram: #{$bigrams.size}"
@@ -134,20 +144,33 @@ def process_file(file_name)
 		# print error message and exit
 		STDERR.puts "Could not open file"
 		exit 4
-	end	# end rescue
-end # end process_file
+	end			# end rescue
+end 			# end process_file
 
-# Helper function to turn the entire file string into an array of lines
+# ##############################################################################
+# DESCRIPTION	:		Helper function to turn the entire file string into an
+# 								array of lines
+# ARGUMENTS		:		str - string that will be split
+# RETURNS 		:		Array of strings split on the '\n' (newline) character
+# NOTES 			:		Given file IO code did not work on windows, this helps
+# 								get around that issue
+# ##############################################################################
 def split_string(str)
 	str.split("\n")
 end
 
-# function for finding most common word to follow a given word
+
+# ##############################################################################
+# DESCRIPTION	:		function for finding most common word to follow a given word
+# ARGUMENTS		:		word - string that is hashed
+# RETURNS 		:		string of the word that most commonly follows argument word
+# NOTES 			:		function uses a basic iterative maximum search algorithm
+# ##############################################################################
 def mcw(word)
 
 	# Make sure the word is in the bigram data structure
 	if not $bigrams[word].nil?
-		next_word = $bigrams[word].keys		# get all of the words that follow 'word'
+		next_word = $bigrams[word].keys				# get all of the words that follow 'word'
 		max = 0
 		max_key = nil
 
@@ -156,17 +179,22 @@ def mcw(word)
 			if $bigrams[word][key] > max
 					max = $bigrams[word][key]
 					max_key = key
-			end	# end if
-		end # end maximum iteration loop
 
-		return max_key # Return key associated with the largest count
+			end						# end if
+		end 						# end maximum iteration loop
+		return max_key 	# Return key associated with the largest count
+	end 							# end if
+	return nil				# return nil if the word is not in the data structure
+end									# end mcw
 
-	end # end if
-	return nil	# return nil if the word is not in the data structure
-end # end mcw
-
-# generate a word to follow the arguement "word"
-# This process should be semi-random and should terminate before 20 words
+# ##############################################################################
+# DESCRIPTION	:		generate a word to follow the arguement word
+# ARGUMENTS		:		word - string that is hashed
+# 								count - integer number of words in the current title
+# RETURNS 		:		string of a word that follows the argument word
+# NOTES 			:		semi-random process that terminates prior to generating 20
+#  								word titles usually
+# ##############################################################################
 def get_next_word(word, count)
 
 	# Check if random number from 0 to 99 is less than 400/count
@@ -179,16 +207,23 @@ def get_next_word(word, count)
 
 			# Get an array of all words following 'word'
 			words = $bigrams[word].keys
-			return words[rand(words.length)]	# Return a random element from the words array
+			return words[rand(words.length)]			# Return a random element from the words array
 
-		end # end if (nil check)
-	end # end if (random check)
+		end 				# end if (nil check)
+	end						# end if (random check)
 
-	return nil	# return nil if the random number is not in the correct range or word is not in bigram
-end # end get_next_word
+	return nil		# return nil if the random number is not in the correct range or word is not in bigram
+end 						# end get_next_word
 
-# Function that iteratively creates song titles
-# This function can use the mcw or get_next_word functions to create titles
+# ##############################################################################
+# DESCRIPTION	:		Iteratively creates song titles
+# ARGUMENTS		:		word - string that is to be the first word in the title
+# RETURNS 		:		string of a generated song title
+# NOTES 			:		Function can use either mcw() or get_next_word() depending
+#  								on desired behavior of generated title.
+# 	 							Latest version removed hard 20 word limit, so mcw() would
+# 								break the program.
+# ##############################################################################
 def create_title(word)
 
 	# Start with given word and a count of 1
@@ -208,17 +243,22 @@ def create_title(word)
 		#next_word = mcw(next_word)
 		next_word = get_next_word(next_word, word_count)
 		word_count += 1
-	end # end while loop
+	end 						# end while loop
 
-	return title # Return the created title, minimum will be the word passsed in
-end # end create_title
+	return title 		# Return the created title, minimum will be the word passsed in
+end 							# end create_title
 
-# function required for self check 1
-# Performs same processing as the first part of process_file
-# This function is called once per line from self check 1
+# ##############################################################################
+# DESCRIPTION	:		Performs same processing as process_file() function
+# ARGUMENTS		:		line - string of a single formatted line from one of the input
+# 								.txt files, usually unique_tracks.txt
+# RETURNS 		:		string of the extracted and modified title. Can be nil.
+# NOTES 			:		This funtion is required for self check 1 and is called once
+#  								Per line.
+# ##############################################################################
 def cleanup_title(line)
 begin
-		line += "\n"	# Add the endline character back after spliting on it
+		line += "\n"			# Add the endline character back after spliting on it
 
 		# Force the encoding to utf-8 to avoid issues with non english characters
 		line.force_encoding 'utf-8'
@@ -253,13 +293,13 @@ begin
 
 		title.downcase! if valid	# Set to lowercase if the line is valid
 
-	  return title	# return the processed title (can be nil)
+	  return title							# return the processed title (can be nil)
 
 	rescue
 		STDERR.puts "Could not open file"
 		exit 4
-	end # end rescue
-end # end cleanup_title
+	end 		# end rescue
+end 			# end cleanup_title
 
 # Executes the program
 def main_loop()
@@ -293,8 +333,8 @@ def main_loop()
 		puts create_title(input)
 		print "Enter a word>> "
 	  input = $stdin.gets.chomp.downcase
-	end	# end input loop
+	end			# end input loop
 
-end	# end main_loop
+end				# end main_loop
 
 main_loop()
