@@ -7,6 +7,9 @@
 # Austin Rosenbaum
 # austinjrosenbaum@gmail.com
 #
+# Formatting was done in Atom editor. If formatting issues occur,
+# please use tabs set to 2 spaces.
+#
 ###############################################################
 
 $bigrams = Hash.new # The Bigram data structure
