@@ -79,7 +79,7 @@ def process_file(file_name)
 				# the valid flag to false
 				valid = false
 				line = nil
-			end
+			end # End if
 
 			# Only continue processing if valid is true
 
