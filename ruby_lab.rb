@@ -173,7 +173,6 @@ def mcw(word)
 
 	# Make sure the word is in the bigram data structure
 	if not $bigrams[word].nil?
-<<<<<<< HEAD
 		next_word = $bigrams[word].keys
 	  max_key = next_word[rand(next_word.length)]
 		#p next_word
@@ -196,25 +195,7 @@ def mcw(word)
 		return max_key
 	end
 	return nil
-end
-=======
-		next_word = $bigrams[word].keys				# get all of the words that follow 'word'
-		max = 0
-		max_key = nil
-
-		# Iteratively find the maximum count for all words following 'word'
-		next_word.each do |key|
-			if $bigrams[word][key] > max
-					max = $bigrams[word][key]
-					max_key = key
->>>>>>> 179aceeee8f84fc656c90db60154f4ae6908c29a
-
-			end						# end if
-		end 						# end maximum iteration loop
-		return max_key 	# Return key associated with the largest count
-	end 							# end if
-	return nil				# return nil if the word is not in the data structure
-end									# end mcw
+end							# end mcw
 
 # ##############################################################################
 # DESCRIPTION	:		generate a word to follow the arguement word
